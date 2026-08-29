@@ -1,0 +1,1506 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Vanta 1t Lab</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: transparent !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --main-surface-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(26 28 31 / 49.4%),
+    rgb(255 255 255 / 49.8%)
+  );
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --input: light-dark(
+    rgb(26 28 31 / 11.8%),
+    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  );
+  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --font-size-base: 14px;
+  --red: light-dark(rgb(186 38 35), rgb(250 66 62));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 10px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-visualize-standalone] {
+  background-color: var(--background) !important;
+}
+
+/* Generic mobile code-block hosts provide light/dark mode but no series palette.
+   AppBlock hosts set all six variables themselves. */
+:root:not([data-app-block-surface]) {
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(#f3883b, #f59a56);
+  --viz-series-3: light-dark(#5dc977, #74d58b);
+  --viz-series-4: light-dark(#eb77b1, #f08fc0);
+  --viz-series-5: light-dark(#9b79ec, #aa91ef);
+  --viz-series-6: light-dark(#3ab9b1, #5acbc2);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+:root:not([data-app-block-surface]) > body {
+  padding: 12px;
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive > .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align="right"]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align="center"]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget > :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The bundled tooltip runtime owns [data-tooltip]. AppBlock's CSS-only
+   pseudo-tooltip can widen dense grids even while hidden. */
+main [data-tooltip]::after {
+  content: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls > .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls > .form-label > :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--interactive-label-primary-default, var(--primary-foreground));
+  background: var(--interactive-bg-primary-default, var(--foreground));
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(
+    in srgb,
+    var(--interactive-label-primary-default, var(--primary-foreground)) 50%,
+    transparent
+  );
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type="file"] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type="file"]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type="file"]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: "";
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type="radio"]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: "";
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed="true"],
+    [aria-selected="true"],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed="true"], [aria-selected="true"], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+</style>
+</head>
+<body>
+<div id="vantaLabRoot">
+  <div class="viz-grid" aria-label="Calculated VANTA-1T metrics">
+    <div class="card viz-stat">
+      <span class="text-muted">Resident weights</span>
+      <span class="viz-stat-value" id="vantaWeights">180.1 GB</span>
+      <span class="text-small" id="vantaReduction">68.1% below MXFP4</span>
+    </div>
+    <div class="card viz-stat">
+      <span class="text-muted">HBM headroom</span>
+      <span class="viz-stat-value" id="vantaHeadroom">11.7 GB</span>
+      <span class="text-small" id="vantaFit">Fits analytical capacity</span>
+    </div>
+    <div class="card viz-stat">
+      <span class="text-muted">Decode ceiling</span>
+      <span class="viz-stat-value" id="vantaTps">701.5 tok/s</span>
+      <span class="text-small">Calculated, never measured</span>
+    </div>
+  </div>
+
+  <div class="viz-controls" aria-label="Architecture controls">
+    <label class="form-label" for="vantaProfile">Weight profile
+      <select class="form-select" id="vantaProfile">
+        <option value="stretch" selected>Binary + residual</option>
+        <option value="balanced">2-bit + residual</option>
+        <option value="mxfp4">MXFP4 baseline</option>
+      </select>
+    </label>
+    <label class="form-label" for="vantaStacks">HBM4 stacks
+      <select class="form-select" id="vantaStacks">
+        <option value="4" selected>4 stacks · 192 GB</option>
+        <option value="6">6 stacks · 288 GB</option>
+        <option value="8">8 stacks · 384 GB</option>
+      </select>
+    </label>
+    <label class="form-label" for="vantaContext">Context
+      <select class="form-select" id="vantaContext">
+        <option value="8192" selected>8K tokens</option>
+        <option value="32768">32K tokens</option>
+        <option value="131072">128K tokens</option>
+        <option value="262144">256K tokens</option>
+      </select>
+    </label>
+    <label class="form-label" for="vantaUsers">Concurrent sequences
+      <select class="form-select" id="vantaUsers">
+        <option value="1" selected>1 sequence</option>
+        <option value="2">2 sequences</option>
+        <option value="4">4 sequences</option>
+        <option value="8">8 sequences</option>
+      </select>
+    </label>
+    <button class="btn btn-primary" type="button" id="vantaRun">Run one token</button>
+  </div>
+
+  <div class="vanta-stage-row" aria-live="polite">
+    <span class="viz-badge" id="vantaStatus">Capacity hypothesis</span>
+    <span id="vantaStage">Ready · router selects 8 of 384 experts</span>
+  </div>
+
+  <svg class="vanta-chip" id="vantaChip" viewBox="0 0 720 390" role="img" aria-labelledby="vantaChipTitle vantaChipDesc">
+    <title id="vantaChipTitle">VANTA-1T package and token dataflow</title>
+    <desc id="vantaChipDesc">Four compute chiplets surrounded by configurable HBM4 stacks. A token moves through routing, near-memory binary experts, residual correction, attention, and output.</desc>
+    <defs>
+      <marker id="vantaArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L7,3 z" class="vanta-arrowhead"></path>
+      </marker>
+    </defs>
+
+    <g class="vanta-package">
+      <rect x="135" y="38" width="450" height="306" rx="24"></rect>
+      <text x="158" y="70" class="vanta-label">ONE RESEARCH PACKAGE</text>
+    </g>
+
+    <g id="vantaHbmLayer" aria-label="HBM4 stacks"></g>
+
+    <g class="vanta-chiplet" data-zone="route">
+      <rect x="270" y="98" width="84" height="78" rx="10"></rect>
+      <text x="312" y="128" text-anchor="middle">ROUTE</text>
+      <text x="312" y="150" text-anchor="middle" class="vanta-sub">top 8 / 384</text>
+    </g>
+    <g class="vanta-chiplet" data-zone="binary">
+      <rect x="366" y="98" width="84" height="78" rx="10"></rect>
+      <text x="408" y="128" text-anchor="middle">BINARY</text>
+      <text x="408" y="150" text-anchor="middle" class="vanta-sub">near memory</text>
+    </g>
+    <g class="vanta-chiplet" data-zone="residual">
+      <rect x="270" y="190" width="84" height="78" rx="10"></rect>
+      <text x="312" y="220" text-anchor="middle">RESIDUAL</text>
+      <text x="312" y="242" text-anchor="middle" class="vanta-sub">4-bit low rank</text>
+    </g>
+    <g class="vanta-chiplet" data-zone="attention">
+      <rect x="366" y="190" width="84" height="78" rx="10"></rect>
+      <text x="408" y="220" text-anchor="middle">ATTN</text>
+      <text x="408" y="242" text-anchor="middle" class="vanta-sub">MLA + KV</text>
+    </g>
+
+    <g class="vanta-sram">
+      <rect x="270" y="283" width="180" height="34" rx="8"></rect>
+      <text x="360" y="305" text-anchor="middle">512 MB SHARED SRAM TARGET</text>
+    </g>
+
+    <g class="vanta-flow" aria-hidden="true">
+      <path id="vantaPathRoute" d="M170 137 H263"></path>
+      <path id="vantaPathBinary" d="M354 137 H360"></path>
+      <path id="vantaPathResidual" d="M408 180 C408 183 350 185 320 190"></path>
+      <path id="vantaPathAttention" d="M354 229 H360"></path>
+      <path id="vantaPathOutput" d="M450 229 H550"></path>
+    </g>
+
+    <text x="44" y="132" class="vanta-io">TOKEN IN</text>
+    <text x="592" y="224" class="vanta-io">TOKEN OUT</text>
+    <text x="360" y="370" text-anchor="middle" class="vanta-foot" id="vantaFoot">4 × 48 GB HBM4 · 11.2 TB/s raw · 650 W target</text>
+  </svg>
+
+  <div class="vanta-capacity" role="img" aria-label="Resident memory compared with HBM capacity">
+    <div class="vanta-capacity-track">
+      <div class="vanta-capacity-weights" id="vantaWeightBar"></div>
+      <div class="vanta-capacity-kv" id="vantaKvBar"></div>
+    </div>
+    <div class="viz-row text-small">
+      <span><span class="vanta-key vanta-key-weights"></span>Weights</span>
+      <span><span class="vanta-key vanta-key-kv"></span>8-bit MLA KV</span>
+      <span id="vantaCapacityLabel">180.3 / 192 GB</span>
+    </div>
+  </div>
+
+  <div class="card vanta-detail" id="vantaDetail">
+    <span class="text-muted">Gating experiment</span>
+    <span id="vantaQuality">Quality preservation is unmeasured. Full-model QAT or distillation must pass before this becomes a performance claim.</span>
+  </div>
+</div>
+
+<style>
+  #vantaLabRoot {
+    display: grid;
+    gap: 16px;
+    color: var(--foreground);
+  }
+  #vantaLabRoot .vanta-stage-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  #vantaLabRoot .vanta-chip {
+    display: block;
+    width: 100%;
+    min-height: 300px;
+    color: var(--foreground);
+  }
+  #vantaLabRoot .vanta-package rect {
+    fill: color-mix(in srgb, var(--muted) 42%, transparent);
+    stroke: var(--border);
+    stroke-width: 2;
+  }
+  #vantaLabRoot .vanta-label,
+  #vantaLabRoot .vanta-foot,
+  #vantaLabRoot .vanta-sub {
+    fill: var(--muted-foreground);
+  }
+  #vantaLabRoot .vanta-label,
+  #vantaLabRoot .vanta-foot,
+  #vantaLabRoot .vanta-io,
+  #vantaLabRoot .vanta-chiplet text,
+  #vantaLabRoot .vanta-sram text,
+  #vantaLabRoot .vanta-hbm text {
+    font-size: 12px;
+    font-weight: 500;
+  }
+  #vantaLabRoot .vanta-sub {
+    font-size: 11px;
+    font-weight: 400;
+  }
+  #vantaLabRoot .vanta-chiplet rect {
+    fill: color-mix(in srgb, var(--viz-series-1) 13%, var(--card));
+    stroke: color-mix(in srgb, var(--viz-series-1) 48%, var(--border));
+    stroke-width: 1.5;
+  }
+  #vantaLabRoot .vanta-chiplet.is-active rect {
+    fill: color-mix(in srgb, var(--viz-series-1) 30%, var(--card));
+    stroke: var(--viz-series-1);
+    stroke-width: 3;
+  }
+  #vantaLabRoot .vanta-chiplet text,
+  #vantaLabRoot .vanta-sram text,
+  #vantaLabRoot .vanta-hbm text,
+  #vantaLabRoot .vanta-io {
+    fill: var(--foreground);
+  }
+  #vantaLabRoot .vanta-hbm rect {
+    fill: color-mix(in srgb, var(--viz-series-2) 16%, var(--card));
+    stroke: color-mix(in srgb, var(--viz-series-2) 52%, var(--border));
+    stroke-width: 1.5;
+  }
+  #vantaLabRoot .vanta-hbm.is-active rect {
+    fill: color-mix(in srgb, var(--viz-series-2) 34%, var(--card));
+    stroke: var(--viz-series-2);
+    stroke-width: 3;
+  }
+  #vantaLabRoot .vanta-sram rect {
+    fill: color-mix(in srgb, var(--viz-series-3) 13%, var(--card));
+    stroke: color-mix(in srgb, var(--viz-series-3) 46%, var(--border));
+  }
+  #vantaLabRoot .vanta-flow path {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 3;
+    marker-end: url(#vantaArrow);
+  }
+  #vantaLabRoot .vanta-flow path.is-active {
+    stroke: var(--viz-series-1);
+  }
+  #vantaLabRoot .vanta-arrowhead {
+    fill: var(--border);
+  }
+  #vantaLabRoot .vanta-capacity {
+    display: grid;
+    gap: 8px;
+  }
+  #vantaLabRoot .vanta-capacity-track {
+    display: flex;
+    height: 18px;
+    overflow: hidden;
+    background: var(--muted);
+    border-radius: 999px;
+  }
+  #vantaLabRoot .vanta-capacity-weights {
+    width: 93.8%;
+    background: var(--viz-series-1);
+    transition: width 220ms ease;
+  }
+  #vantaLabRoot .vanta-capacity-kv {
+    width: 0.2%;
+    background: var(--viz-series-2);
+    transition: width 220ms ease;
+  }
+  #vantaLabRoot .vanta-key {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-inline-end: 5px;
+    border-radius: 2px;
+  }
+  #vantaLabRoot .vanta-key-weights { background: var(--viz-series-1); }
+  #vantaLabRoot .vanta-key-kv { background: var(--viz-series-2); }
+  #vantaLabRoot .vanta-detail {
+    display: grid;
+    gap: 4px;
+  }
+  @media (max-width: 520px) {
+    #vantaLabRoot .vanta-chip {
+      min-height: 240px;
+    }
+    #vantaLabRoot .vanta-label,
+    #vantaLabRoot .vanta-foot,
+    #vantaLabRoot .vanta-io,
+    #vantaLabRoot .vanta-chiplet text,
+    #vantaLabRoot .vanta-sram text,
+    #vantaLabRoot .vanta-hbm text {
+      font-size: 11px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #vantaLabRoot .vanta-capacity-weights,
+    #vantaLabRoot .vanta-capacity-kv {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById("vantaLabRoot");
+  const profiles = {
+    stretch: {
+      label: "Binary + residual",
+      bits: 1.325,
+      quality: "Quality preservation is unmeasured. Full-model QAT or distillation must pass before this becomes a performance claim."
+    },
+    balanced: {
+      label: "2-bit + residual",
+      bits: 2.325,
+      quality: "The balanced profile is less aggressive, but it still requires model-specific calibration or quantization-aware training."
+    },
+    mxfp4: {
+      label: "MXFP4 baseline",
+      bits: 4.35,
+      quality: "This is the public-format baseline plus a small metadata allowance; it does not fit the selected compact package."
+    }
+  };
+  const constants = {
+    routedParams: 1014686023680,
+    activeParams: 32000000000,
+    nonexpertGb: 12,
+    layers: 61,
+    latent: 576,
+    gb: 1000000000,
+    tb: 1000000000000,
+    stackGb: 48,
+    stackBw: 2.8,
+    efficiency: 0.35,
+    baselineBits: 4.35
+  };
+  const els = {
+    profile: root.querySelector("#vantaProfile"),
+    stacks: root.querySelector("#vantaStacks"),
+    context: root.querySelector("#vantaContext"),
+    users: root.querySelector("#vantaUsers"),
+    weights: root.querySelector("#vantaWeights"),
+    reduction: root.querySelector("#vantaReduction"),
+    headroom: root.querySelector("#vantaHeadroom"),
+    fit: root.querySelector("#vantaFit"),
+    tps: root.querySelector("#vantaTps"),
+    status: root.querySelector("#vantaStatus"),
+    stage: root.querySelector("#vantaStage"),
+    quality: root.querySelector("#vantaQuality"),
+    hbmLayer: root.querySelector("#vantaHbmLayer"),
+    foot: root.querySelector("#vantaFoot"),
+    weightBar: root.querySelector("#vantaWeightBar"),
+    kvBar: root.querySelector("#vantaKvBar"),
+    capacityLabel: root.querySelector("#vantaCapacityLabel"),
+    run: root.querySelector("#vantaRun")
+  };
+
+  function weightGb(bits) {
+    return constants.routedParams * bits / 8 / constants.gb + constants.nonexpertGb;
+  }
+
+  function kvGb(context, users) {
+    return constants.layers * context * users * constants.latent / constants.gb;
+  }
+
+  function decodeTps(bits, stacks, context) {
+    const bytes = constants.activeParams * bits / 8 + constants.layers * context * constants.latent;
+    return stacks * constants.stackBw * constants.tb * constants.efficiency / bytes;
+  }
+
+  function renderHbm(stacks) {
+    const positions = [
+      [158, 92], [158, 182], [158, 272], [492, 92],
+      [492, 182], [492, 272], [250, 48], [386, 48]
+    ];
+    els.hbmLayer.innerHTML = "";
+    positions.slice(0, stacks).forEach((position, index) => {
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      group.setAttribute("class", "vanta-hbm");
+      group.setAttribute("data-hbm", String(index));
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", String(position[0]));
+      rect.setAttribute("y", String(position[1]));
+      rect.setAttribute("width", "68");
+      rect.setAttribute("height", "54");
+      rect.setAttribute("rx", "8");
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", String(position[0] + 34));
+      text.setAttribute("y", String(position[1] + 31));
+      text.setAttribute("text-anchor", "middle");
+      text.textContent = "HBM " + (index + 1);
+      group.append(rect, text);
+      els.hbmLayer.append(group);
+    });
+  }
+
+  function update() {
+    const profile = profiles[els.profile.value];
+    const stacks = Number(els.stacks.value);
+    const context = Number(els.context.value);
+    const users = Number(els.users.value);
+    const capacity = stacks * constants.stackGb;
+    const weights = weightGb(profile.bits);
+    const kv = kvGb(context, users);
+    const total = weights + kv;
+    const baseline = weightGb(constants.baselineBits);
+    const reduction = (1 - weights / baseline) * 100;
+    const headroom = capacity - total;
+    const tps = decodeTps(profile.bits, stacks, context);
+    const fits = headroom >= 0;
+
+    els.weights.textContent = weights.toFixed(1) + " GB";
+    els.reduction.textContent = reduction.toFixed(1) + "% below MXFP4";
+    els.headroom.textContent = (headroom >= 0 ? "" : "−") + Math.abs(headroom).toFixed(1) + " GB";
+    els.fit.textContent = fits ? "Fits analytical capacity" : "Exceeds selected capacity";
+    els.fit.classList.toggle("text-destructive", !fits);
+    els.tps.textContent = tps.toFixed(1) + " tok/s";
+    els.status.textContent = fits && reduction > 50 ? "Stretch target clears 50%" : fits ? "Capacity hypothesis" : "Does not fit";
+    els.quality.textContent = profile.quality;
+    els.foot.textContent = stacks + " × 48 GB HBM4 · " + (stacks * constants.stackBw).toFixed(1) + " TB/s raw · " + (stacks === 4 ? "650" : stacks === 6 ? "780" : "900") + " W target";
+    els.weightBar.style.width = Math.min(100, weights / capacity * 100).toFixed(2) + "%";
+    els.kvBar.style.width = Math.min(Math.max(0, 100 - weights / capacity * 100), kv / capacity * 100).toFixed(2) + "%";
+    els.capacityLabel.textContent = total.toFixed(1) + " / " + capacity.toFixed(0) + " GB";
+    renderHbm(stacks);
+  }
+
+  const phaseIds = ["vantaPathRoute", "vantaPathBinary", "vantaPathResidual", "vantaPathAttention", "vantaPathOutput"];
+  const phaseZones = ["route", "binary", "residual", "attention", null];
+  const phaseText = [
+    "Route · select 8 of 384 experts",
+    "Fetch · binary backbones stay beside HBM",
+    "Correct · apply sparse 4-bit residual",
+    "Attend · read the local MLA KV cache",
+    "Emit · one token completes"
+  ];
+  let animationToken = 0;
+
+  function clearPhases() {
+    phaseIds.forEach((id) => root.querySelector("#" + id).classList.remove("is-active"));
+    root.querySelectorAll(".vanta-chiplet, .vanta-hbm").forEach((node) => node.classList.remove("is-active"));
+  }
+
+  function runToken() {
+    animationToken += 1;
+    const thisRun = animationToken;
+    clearPhases();
+    els.run.disabled = true;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const delay = reduced ? 40 : 440;
+    phaseIds.forEach((id, index) => {
+      window.setTimeout(() => {
+        if (thisRun !== animationToken) return;
+        clearPhases();
+        root.querySelector("#" + id).classList.add("is-active");
+        const zone = phaseZones[index];
+        if (zone) root.querySelector('[data-zone="' + zone + '"]').classList.add("is-active");
+        if (index === 1) root.querySelectorAll(".vanta-hbm").forEach((node) => node.classList.add("is-active"));
+        els.stage.textContent = phaseText[index];
+        if (index === phaseIds.length - 1) {
+          window.setTimeout(() => {
+            if (thisRun !== animationToken) return;
+            clearPhases();
+            els.stage.textContent = "Ready · change assumptions or run another token";
+            els.run.disabled = false;
+          }, delay);
+        }
+      }, delay * index);
+    });
+  }
+
+  [els.profile, els.stacks, els.context, els.users].forEach((control) => {
+    control.addEventListener("change", update);
+  });
+  els.run.addEventListener("click", runToken);
+  update();
+})();
+</script>
+
+<script id="codex-visualization-floating-ui-core" src="https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js"></script>
+<script id="codex-visualization-floating-ui-dom" src="https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js"></script>
+<script id="codex-visualization-lucide" async src="https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js"></script>
+<script id="codex-visualization-tooltip">/* oxlint-disable typescript/no-unsafe-argument, typescript/no-unsafe-call, typescript/no-unsafe-return */
+// Runs inside the visualization sandbox, not the host webview.
+(() => {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set(["top", "right", "bottom", "left"]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =>
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest("[data-tooltip]")
+      : null;
+  const containsTarget = (trigger, target) =>
+    target?.nodeType != null && trigger.contains(target);
+  const getContent = (trigger) =>
+    trigger.getAttribute("data-tooltip")?.trim() ?? "";
+  const getPlacement = (trigger) => {
+    const placement = trigger.getAttribute("data-tooltip-placement");
+    return tooltipPlacements.has(placement) ? placement : "top";
+  };
+  const getTooltip = () => {
+    if (tooltip == null) {
+      tooltip = document.createElement("div");
+      tooltip.id = tooltipId;
+      tooltip.className = "tooltip";
+      tooltip.setAttribute("role", "tooltip");
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) => {
+    const ids = new Set(
+      (trigger.getAttribute("aria-describedby") ?? "")
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute("aria-describedby");
+    } else {
+      trigger.setAttribute("aria-describedby", [...ids].join(" "));
+    }
+  };
+  const clearOpenTimeout = () => {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) => {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) => {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              "--tooltip-available-width",
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              "--tooltip-available-height",
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: "fixed",
+    })
+      .then(({ x, y }) => {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = "visible";
+      })
+      .catch(() => {
+        if (activeTrigger === trigger && request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) => {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = "hidden";
+    floating.style.transform = "translate(0, 0)";
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () => {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) => {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() < skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() => {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(":focus-visible")) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) => {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () => {
+    closeTooltip(false);
+    document.removeEventListener("pointerover", handlePointerOpen);
+    document.removeEventListener("pointerout", handleLeave);
+    document.removeEventListener("focusin", handleFocusIn);
+    document.removeEventListener("focusout", handleLeave);
+    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("contextmenu", handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener("pointerover", handlePointerOpen);
+  document.addEventListener("pointerout", handleLeave);
+  document.addEventListener("focusin", handleFocusIn);
+  document.addEventListener("focusout", handleLeave);
+  document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener("contextmenu", handleContextMenu);
+  window.addEventListener("pagehide", destroy, { once: true });
+})();
+</script>
+<script id="codex-visualization-lucide-initialization">(() => {
+  const initialize = () => {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById("codex-visualization-lucide")
+    ?.addEventListener("load", initialize, { once: true });
+})();
+</script>
+</body>
+</html>

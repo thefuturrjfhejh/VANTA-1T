@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this artifact, please cite it using the metadata below."
+title: "VANTA-1T: Open Analytical Architecture and Executable Model"
+type: software
+authors:
+  - family-names: Monjur
+    given-names: Mahee
+affiliation: Independent Researcher
+version: 0.1.0
+date-released: 2026-08-26
+license: MIT
+abstract: >-
+  An open analytical accelerator concept and executable model for inference on
+  a one-trillion-total, 32-billion-active mixture-of-experts model.
+keywords:
+  - mixture of experts
+  - inference accelerator
+  - HBM4
+  - near-memory computing
+  - quantization
+  - chiplets
+
