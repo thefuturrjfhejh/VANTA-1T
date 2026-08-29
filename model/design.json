@@ -1,0 +1,28 @@
+{
+  "project": "VANTA-1T",
+  "expansion": "Variable-precision Activation-routed Near-memory Tile Accelerator",
+  "scope": "Inference-only concept for a 1T-total, 32B-active MoE model",
+  "status": "Analytical architecture; not fabricated; accuracy not validated",
+  "target_package": {
+    "compute_chiplets": 4,
+    "hbm4_stacks": 4,
+    "hbm4_capacity_gb_each": 48,
+    "hbm4_bandwidth_tb_s_each_conservative": 2.8,
+    "shared_sram_mb_target": 512,
+    "power_w_target": 650
+  },
+  "dataflow": [
+    "Route tokens before expert fetch",
+    "Execute binary expert backbone in near-memory engines",
+    "Apply sparse low-rank residual on vector tiles",
+    "Keep attention, shared experts, and routing at higher precision",
+    "Keep hot KV locally and spill cold/prefix KV to coherent side memory"
+  ],
+  "gating_risks": [
+    "Binary-residual quality on Kimi K2.5",
+    "Four-stack capacity after runtime fragmentation",
+    "Thermals and signal integrity of custom HBM4 base-die compute",
+    "Compiler scheduling under adversarial expert imbalance",
+    "No PDK-backed area, timing, yield, or cost model yet"
+  ]
+}
