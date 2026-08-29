@@ -1,0 +1,112 @@
+{
+  "status": "analytical research target; no silicon or quality measurements",
+  "model": {
+    "name": "Kimi K2.5-class MoE",
+    "total_parameters_published": 1000000000000,
+    "active_parameters": 32000000000,
+    "hidden_size": 7168,
+    "layers": 61,
+    "dense_layers": 1,
+    "routed_experts": 384,
+    "selected_experts": 8,
+    "expert_intermediate_size": 2048,
+    "kv_lora_rank": 512,
+    "qk_rope_head_dim": 64,
+    "context_length": 262144,
+    "moe_layers": 60,
+    "routed_parameter_estimate": 1014686023680
+  },
+  "hardware": {
+    "research_target": {
+      "name": "VANTA-1T research target",
+      "hbm_stacks": 4,
+      "hbm_capacity_gb_per_stack": 48.0,
+      "hbm_bandwidth_tb_s_per_stack": 2.8,
+      "service_efficiency": 0.35,
+      "nonexpert_resident_gb": 12.0,
+      "target_package_power_w": 650.0
+    },
+    "production_capacity_option": {
+      "name": "VANTA-1T production-capacity option",
+      "hbm_stacks": 6,
+      "hbm_capacity_gb_per_stack": 48.0,
+      "hbm_bandwidth_tb_s_per_stack": 2.8,
+      "service_efficiency": 0.35,
+      "nonexpert_resident_gb": 12.0,
+      "target_package_power_w": 780.0
+    }
+  },
+  "headline": {
+    "mxfp4_resident_weight_gb": 563.74,
+    "vanta_stretch_resident_weight_gb": 180.06,
+    "weight_reduction_vs_mxfp4_pct": 68.06,
+    "weight_reduction_vs_fp8_pct": 82.46,
+    "hbm_capacity_gb": 192.0,
+    "hbm_stack_count": 4,
+    "rubin_nvl4_gpu_count_reference": 4,
+    "accelerator_package_count_reduction_vs_nvl4_pct": 75.0,
+    "package_count_note": "Package-count comparison is not a die-area measurement; NVIDIA lists four Rubin GPUs for NVL4, while VANTA is a one-package research target."
+  },
+  "representative_cases": {
+    "research_8k_one_user": {
+      "profile": "VANTA binary-residual stretch",
+      "effective_expert_bits": 1.325,
+      "resident_weights_gb": 180.057,
+      "kv_cache_gb": 0.288,
+      "total_hbm_demand_gb": 180.345,
+      "hbm_capacity_gb": 192.0,
+      "hbm_headroom_gb": 11.655,
+      "fits": true,
+      "weight_reduction_vs_mxfp4_pct": 68.06,
+      "single_stream_decode_ceiling_tps": 701.5,
+      "quality_status": "Research hypothesis only; quality preservation is unmeasured."
+    },
+    "research_128k_one_user": {
+      "profile": "VANTA binary-residual stretch",
+      "effective_expert_bits": 1.325,
+      "resident_weights_gb": 180.057,
+      "kv_cache_gb": 4.605,
+      "total_hbm_demand_gb": 184.663,
+      "hbm_capacity_gb": 192.0,
+      "hbm_headroom_gb": 7.337,
+      "fits": true,
+      "weight_reduction_vs_mxfp4_pct": 68.06,
+      "single_stream_decode_ceiling_tps": 395.7,
+      "quality_status": "Research hypothesis only; quality preservation is unmeasured."
+    },
+    "production_128k_eight_users": {
+      "profile": "VANTA binary-residual stretch",
+      "effective_expert_bits": 1.325,
+      "resident_weights_gb": 180.057,
+      "kv_cache_gb": 36.843,
+      "total_hbm_demand_gb": 216.9,
+      "hbm_capacity_gb": 288.0,
+      "hbm_headroom_gb": 71.1,
+      "fits": true,
+      "weight_reduction_vs_mxfp4_pct": 68.06,
+      "single_stream_decode_ceiling_tps": 593.6,
+      "quality_status": "Research hypothesis only; quality preservation is unmeasured."
+    },
+    "same_bandwidth_mxfp4_8k": {
+      "profile": "MXFP4 baseline",
+      "effective_expert_bits": 4.35,
+      "resident_weights_gb": 563.736,
+      "kv_cache_gb": 0.288,
+      "total_hbm_demand_gb": 564.023,
+      "hbm_capacity_gb": 192.0,
+      "hbm_headroom_gb": -372.023,
+      "fits": false,
+      "weight_reduction_vs_mxfp4_pct": 0.0,
+      "single_stream_decode_ceiling_tps": 221.6,
+      "quality_status": "Public deployment format; metadata term is an analytical allowance."
+    }
+  },
+  "assumptions": [
+    "HBM capacity uses four or six 48 GB stacks.",
+    "HBM bandwidth uses 2.8 TB/s per stack, not the faster 3.3 TB/s peak claim.",
+    "The 35% service-efficiency factor is a scenario assumption, not a measurement.",
+    "Binary-residual accuracy on Kimi K2.5 is unknown and is the main gating experiment.",
+    "KV cache uses 8-bit MLA latents and is modeled without allocator fragmentation.",
+    "Physical package area and thermal feasibility require foundry/EDA validation."
+  ]
+}

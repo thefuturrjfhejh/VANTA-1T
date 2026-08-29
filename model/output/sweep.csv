@@ -1,0 +1,49 @@
+profile,effective_expert_bits,resident_weights_gb,kv_cache_gb,total_hbm_demand_gb,hbm_capacity_gb,hbm_headroom_gb,fits,weight_reduction_vs_mxfp4_pct,single_stream_decode_ceiling_tps,quality_status,context_tokens,concurrent_sequences,kv_bits
+MXFP4 baseline,4.35,563.736,0.288,564.023,192.0,-372.023,False,0.0,221.6,Public deployment format; metadata term is an analytical allowance.,8192,1,8
+MXFP4 baseline,4.35,563.736,0.576,564.311,192.0,-372.311,False,0.0,221.6,Public deployment format; metadata term is an analytical allowance.,8192,2,8
+MXFP4 baseline,4.35,563.736,1.151,564.887,192.0,-372.887,False,0.0,221.6,Public deployment format; metadata term is an analytical allowance.,8192,4,8
+MXFP4 baseline,4.35,563.736,2.303,566.038,192.0,-374.038,False,0.0,221.6,Public deployment format; metadata term is an analytical allowance.,8192,8,8
+MXFP4 baseline,4.35,563.736,1.151,564.887,192.0,-372.887,False,0.0,211.3,Public deployment format; metadata term is an analytical allowance.,32768,1,8
+MXFP4 baseline,4.35,563.736,2.303,566.038,192.0,-374.038,False,0.0,211.3,Public deployment format; metadata term is an analytical allowance.,32768,2,8
+MXFP4 baseline,4.35,563.736,4.605,568.341,192.0,-376.341,False,0.0,211.3,Public deployment format; metadata term is an analytical allowance.,32768,4,8
+MXFP4 baseline,4.35,563.736,9.211,572.946,192.0,-380.946,False,0.0,211.3,Public deployment format; metadata term is an analytical allowance.,32768,8,8
+MXFP4 baseline,4.35,563.736,4.605,568.341,192.0,-376.341,False,0.0,178.1,Public deployment format; metadata term is an analytical allowance.,131072,1,8
+MXFP4 baseline,4.35,563.736,9.211,572.946,192.0,-380.946,False,0.0,178.1,Public deployment format; metadata term is an analytical allowance.,131072,2,8
+MXFP4 baseline,4.35,563.736,18.421,582.157,192.0,-390.157,False,0.0,178.1,Public deployment format; metadata term is an analytical allowance.,131072,4,8
+MXFP4 baseline,4.35,563.736,36.843,600.578,192.0,-408.578,False,0.0,178.1,Public deployment format; metadata term is an analytical allowance.,131072,8,8
+MXFP4 baseline,4.35,563.736,9.211,572.946,192.0,-380.946,False,0.0,147.3,Public deployment format; metadata term is an analytical allowance.,262144,1,8
+MXFP4 baseline,4.35,563.736,18.421,582.157,192.0,-390.157,False,0.0,147.3,Public deployment format; metadata term is an analytical allowance.,262144,2,8
+MXFP4 baseline,4.35,563.736,36.843,600.578,192.0,-408.578,False,0.0,147.3,Public deployment format; metadata term is an analytical allowance.,262144,4,8
+MXFP4 baseline,4.35,563.736,73.686,637.421,192.0,-445.421,False,0.0,147.3,Public deployment format; metadata term is an analytical allowance.,262144,8,8
+VANTA balanced,2.325,306.893,0.288,307.181,192.0,-115.181,False,45.56,408.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,8192,1,8
+VANTA balanced,2.325,306.893,0.576,307.469,192.0,-115.469,False,45.56,408.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,8192,2,8
+VANTA balanced,2.325,306.893,1.151,308.044,192.0,-116.044,False,45.56,408.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,8192,4,8
+VANTA balanced,2.325,306.893,2.303,309.196,192.0,-117.196,False,45.56,408.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,8192,8,8
+VANTA balanced,2.325,306.893,1.151,308.044,192.0,-116.044,False,45.56,375.1,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,32768,1,8
+VANTA balanced,2.325,306.893,2.303,309.196,192.0,-117.196,False,45.56,375.1,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,32768,2,8
+VANTA balanced,2.325,306.893,4.605,311.498,192.0,-119.498,False,45.56,375.1,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,32768,4,8
+VANTA balanced,2.325,306.893,9.211,316.104,192.0,-124.104,False,45.56,375.1,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,32768,8,8
+VANTA balanced,2.325,306.893,4.605,311.498,192.0,-119.498,False,45.56,281.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,131072,1,8
+VANTA balanced,2.325,306.893,9.211,316.104,192.0,-124.104,False,45.56,281.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,131072,2,8
+VANTA balanced,2.325,306.893,18.421,325.315,192.0,-133.315,False,45.56,281.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,131072,4,8
+VANTA balanced,2.325,306.893,36.843,343.736,192.0,-151.736,False,45.56,281.9,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,131072,8,8
+VANTA balanced,2.325,306.893,9.211,316.104,192.0,-124.104,False,45.56,211.8,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,262144,1,8
+VANTA balanced,2.325,306.893,18.421,325.315,192.0,-133.315,False,45.56,211.8,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,262144,2,8
+VANTA balanced,2.325,306.893,36.843,343.736,192.0,-151.736,False,45.56,211.8,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,262144,4,8
+VANTA balanced,2.325,306.893,73.686,380.579,192.0,-188.579,False,45.56,211.8,Requires model-specific calibration or QAT; not validated on Kimi K2.5.,262144,8,8
+VANTA binary-residual stretch,1.325,180.057,0.288,180.345,192.0,11.655,True,68.06,701.5,Research hypothesis only; quality preservation is unmeasured.,8192,1,8
+VANTA binary-residual stretch,1.325,180.057,0.576,180.633,192.0,11.367,True,68.06,701.5,Research hypothesis only; quality preservation is unmeasured.,8192,2,8
+VANTA binary-residual stretch,1.325,180.057,1.151,181.209,192.0,10.791,True,68.06,701.5,Research hypothesis only; quality preservation is unmeasured.,8192,4,8
+VANTA binary-residual stretch,1.325,180.057,2.303,182.36,192.0,9.64,True,68.06,701.5,Research hypothesis only; quality preservation is unmeasured.,8192,8,8
+VANTA binary-residual stretch,1.325,180.057,1.151,181.209,192.0,10.791,True,68.06,607.6,Research hypothesis only; quality preservation is unmeasured.,32768,1,8
+VANTA binary-residual stretch,1.325,180.057,2.303,182.36,192.0,9.64,True,68.06,607.6,Research hypothesis only; quality preservation is unmeasured.,32768,2,8
+VANTA binary-residual stretch,1.325,180.057,4.605,184.663,192.0,7.337,True,68.06,607.6,Research hypothesis only; quality preservation is unmeasured.,32768,4,8
+VANTA binary-residual stretch,1.325,180.057,9.211,189.268,192.0,2.732,True,68.06,607.6,Research hypothesis only; quality preservation is unmeasured.,32768,8,8
+VANTA binary-residual stretch,1.325,180.057,4.605,184.663,192.0,7.337,True,68.06,395.7,Research hypothesis only; quality preservation is unmeasured.,131072,1,8
+VANTA binary-residual stretch,1.325,180.057,9.211,189.268,192.0,2.732,True,68.06,395.7,Research hypothesis only; quality preservation is unmeasured.,131072,2,8
+VANTA binary-residual stretch,1.325,180.057,18.421,198.479,192.0,-6.479,False,68.06,395.7,Research hypothesis only; quality preservation is unmeasured.,131072,4,8
+VANTA binary-residual stretch,1.325,180.057,36.843,216.9,192.0,-24.9,False,68.06,395.7,Research hypothesis only; quality preservation is unmeasured.,131072,8,8
+VANTA binary-residual stretch,1.325,180.057,9.211,189.268,192.0,2.732,True,68.06,270.1,Research hypothesis only; quality preservation is unmeasured.,262144,1,8
+VANTA binary-residual stretch,1.325,180.057,18.421,198.479,192.0,-6.479,False,68.06,270.1,Research hypothesis only; quality preservation is unmeasured.,262144,2,8
+VANTA binary-residual stretch,1.325,180.057,36.843,216.9,192.0,-24.9,False,68.06,270.1,Research hypothesis only; quality preservation is unmeasured.,262144,4,8
+VANTA binary-residual stretch,1.325,180.057,73.686,253.743,192.0,-61.743,False,68.06,270.1,Research hypothesis only; quality preservation is unmeasured.,262144,8,8
